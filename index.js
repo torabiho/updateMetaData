@@ -89,7 +89,12 @@ const main = async () => {
         );
       }
 
-      folderPath = removeQuotes(folderPath); // Remove single quotes if present
+      // Remove single quotes if present
+      folderPath = removeQuotes(folderPath);
+
+      // Replace backslashes with forward slashes
+      folderPath = folderPath.replace(/\\/g, "");
+
       folderPath = path.resolve(folderPath);
       folderPath = await validateFolderPath(folderPath);
 
