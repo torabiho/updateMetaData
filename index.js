@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import readline from "readline";
 
 import { updateVideosMetadata } from "./src/updateVideos.js";
 import { updateImages } from "./src/updateImages.js";
@@ -37,4 +38,68 @@ const processFiles = async (folderPath) => {
   }
 };
 
-processFiles("./files");
+const getUserInput = (question) => {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve) => {
+    rl.question(question, (answer) => {
+      rl.close();
+      resolve(answer);
+    });
+  });
+};
+
+const validateFolderPath = async (folderPath) => {
+  try {
+    const folderStats = await fs.stat(folderPath);
+
+    if (!folderStats.isDirectory()) {
+      throw new Error("Provided path is not a directory.");
+    }
+
+    return folderPath;
+  } catch (error) {
+    throw new Error(
+      "Invalid folder path. Please provide a valid directory path."
+    );
+  }
+};
+
+const removeQuotes = (str) => {
+  return str.replace(/^'|'$/g, "");
+};
+
+const main = async () => {
+  console.log("Hello! Please provide the folder path:");
+
+  let folderPath;
+  let validPath = false;
+
+  while (!validPath) {
+    try {
+      folderPath = await getUserInput("> ");
+      folderPath = folderPath.trim();
+
+      if (!folderPath) {
+        throw new Error(
+          "Folder path cannot be empty. Please provide a valid directory path."
+        );
+      }
+
+      folderPath = removeQuotes(folderPath); // Remove single quotes if present
+      folderPath = path.resolve(folderPath);
+      folderPath = await validateFolderPath(folderPath);
+
+      validPath = true;
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
+  processFiles(folderPath);
+};
+
+main();

@@ -1,4 +1,6 @@
 {
+  "name": "updateMetaData",
+  "version": "1.0.0",
   "type": "module",
   "dependencies": {
     "buffer": "^6.0.3",
@@ -14,14 +16,14 @@
     "@babel/preset-env": "^7.22.9",
     "eslint": "^8.46.0"
   },
-  "name": "updateexif",
-  "version": "1.0.0",
-  "main": "processImages.js",
+  "main": "index.js",
   "scripts": {
+    "install-deps": "npm install",
+    "start": "npm run install-deps && node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Hossein Torabi",
   "license": "ISC",
   "description": ""
 }
